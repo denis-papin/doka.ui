@@ -68,7 +68,7 @@ async function decodeCBOR(data: ArrayBuffer) {
 const dokaObjects = ref<SearchResult|undefined>(undefined)
 
 const fetchObjects = async () => {
-  const response = await fetch('http://127.0.0.1:3000/cbor/search_result')
+  const response = await fetch('http://127.0.0.1:3000/harbor/cbor/search_result')
   if (!response.ok) {
     throw new Error(`HTTP error: ${response.status}`)
   }
@@ -102,7 +102,7 @@ const allFiles = ref<Record<string, File | undefined>>({})
 const fetchImagesAsFile = async (file_ref: string | undefined) : Promise<File | undefined> => {
   if (!file_ref) return undefined
 
-  const response = await fetch('http://127.0.0.1:3000/cbor/get_file/' + file_ref)
+  const response = await fetch('http://127.0.0.1:3000/harbor/cbor/get_file/' + file_ref)
   if (!response.ok) {
     throw new Error(`HTTP error: ${response.status}`)
   }
@@ -115,7 +115,7 @@ const fetchImagesAsFile = async (file_ref: string | undefined) : Promise<File | 
 const fetchOriginalAsFile = async (file_ref: string | undefined) : Promise<File | undefined> => {
   if (!file_ref) return undefined
 
-  const response = await fetch('http://127.0.0.1:3000/cbor/view_file/' + file_ref)
+  const response = await fetch('http://127.0.0.1:3000/harbor/cbor/view_file/' + file_ref)
   if (!response.ok) {
     throw new Error(`HTTP error: ${response.status}`)
   }
