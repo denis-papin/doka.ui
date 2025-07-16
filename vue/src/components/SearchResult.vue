@@ -1,25 +1,104 @@
-
 <template>
-  <div class="p-6">
-    <h1 class="text-2xl font-bold text-gray-700 mb-6 text-center">DokaObject Example {{nbObjects}}</h1>
+  <div class="grid-container">
+<!--    <h1 class="">DokaObject Example {{nbObjects}}</h1>-->
+    <div class="search-result-container">
 
-    <!-- DokaObject Components in a Responsive Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 justify-items-center">
-      <div v-for="item in listOfObjects"  :key="item.item_id" class="w-full flex-grow" @click="handleGetOriginalFile(item.file_ref)">
-      <doka-object
-          :binary-file="allFiles[item.item_id]"
-          :properties="item.properties"
-          class="w-full flex-grow"
-      />
+      <!-- DokaObject Components in a Responsive Grid -->
+
+        <div v-for="item in listOfObjects" :key="item.item_id" class="items" @click="handleGetOriginalFile(item.file_ref)">
+
+
+          <doka-object
+              :binary-file="allFiles[item.item_id]"
+              :properties="item.properties"
+              class="doka-object"
+          />
+
       </div>
     </div>
 
     <!-- Image viewer -->
-    <div v-if="originalFileUrl" class="fixed inset-0 flex w-2/3  justify-center items-center">
-      <img :src="originalFileUrl" alt="originalFile" class="w-2/3 justify-center items-center rounded" />
+    <div v-if="originalFileUrl" class="image-viewer">
+
+      <FileViewer :document-url="originalFileUrl"/>
     </div>
   </div>
 </template>
+
+
+<style scoped lang="scss">
+
+
+.grid-container {
+  border: 1px solid red;
+  display: flex;
+  flex-direction: row; /* Ensures horizontal alignment */
+  width: 100%;
+  height: 100%;
+  // grid-template-columns: repeat(1, 1fr);
+  // gap: 1.5rem;
+  margin-top: 1.5rem;
+  // justify-items: center;
+
+  //@media (min-width: 640px) {
+  //  grid-template-columns: repeat(2, 1fr);
+  //}
+  //
+  //@media (min-width: 1024px) {
+  //  grid-template-columns: repeat(4, 1fr);
+  //}
+}
+
+.search-result-container {
+  border: 1px solid blue;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  // grid-template-columns: 1fr;
+  // gap: 1.5rem;
+  //padding: 1.5rem;
+  //justify-items: center;
+  flex-grow: 1;
+  width: 70%;
+  height: 100%;
+  //@media (min-width: 640px) { // sm:grid-cols-2
+  //  grid-template-columns: repeat(2, 1fr);
+  //}
+  //
+  //@media (min-width: 1024px) { // lg:grid-cols-3
+  //  grid-template-columns: repeat(3, 1fr);
+  //}
+  //
+  //@media (min-width: 1280px) { // xl:grid-cols-4
+  //  grid-template-columns: repeat(4, 1fr);
+  //}
+}
+
+.items {
+  border: 1px solid yellow;
+  padding: 0.8rem;
+  // width: 10%;
+  // flex-grow: 1;
+  //cursor: pointer;
+  //display: flex;
+  //justify-content: center;
+}
+
+.doka-object {
+  width: 100%;
+  max-width: 300px; // Ensures objects don't stretch too much on large screens
+}
+
+.image-viewer {
+  // display: none;
+  border: 1px solid black;
+  // flex-grow: 1;
+  width: 30%;
+  padding: 5rem 0.8rem 0.8rem 0.8rem;
+  height: 100%;
+  // width: 33.3333%;
+}
+</style>
 
 
 <script setup lang="ts">
@@ -39,7 +118,9 @@
  */
 
 import {computed, ref, watch} from 'vue'
-import DokaObject from './DokaObject.vue' // Adjust the path to the component file
+import DokaObject from './DokaObject.vue'
+import FileViewer from "./DocumentViewer.vue";
+import {decodeCBOR} from "../types/helpers.ts"; // Adjust the path to the component file
 
 interface SearchResult {
   items: DokaObject[]
@@ -55,15 +136,6 @@ const originalFileUrl = ref<string | undefined>(undefined)
 
 /** Search result aspect */
 
-async function decodeCBOR(data: ArrayBuffer) {
-  try {
-    // Decode using cborg
-    return  await window.decode(new Uint8Array(data));
-  } catch (err) {
-    console.error('Failed to decode CBOR:', err);
-    throw err;
-  }
-}
 
 const dokaObjects = ref<SearchResult|undefined>(undefined)
 
@@ -171,18 +243,3 @@ watch(
 
 </script>
 
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>

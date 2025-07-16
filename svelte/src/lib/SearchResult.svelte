@@ -124,19 +124,19 @@
 </script>
 
 
-<div class="p-6">
-    <h1 class="text-2xl font-bold text-gray-700 mb-6 text-center">
+<div class="container">
+    <h1 class="header">
         DokaObject Example {nbObjects}
     </h1>
 
     <!-- DokaObject Components in a Responsive Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 justify-items-center">
+    <div class="grid-container">
         {#each listOfObjects as item (item.item_id)}
-            <div class="w-full flex-grow" on:click={() => handleGetOriginalFile(item.file_ref)}>
+            <div class="item-container" on:click={() => handleGetOriginalFile(item.file_ref)}>
                 <DokaObject
                         binaryFile={allFiles[item.item_id]}
                         properties={item.properties}
-                        class="w-full flex-grow"
+                        class="object"
                 />
             </div>
         {/each}
@@ -144,25 +144,84 @@
 
     <!-- Image viewer -->
     {#if originalFileUrl}
-        <div class="fixed inset-0 flex w-2/3 justify-center items-center">
-            <img src={originalFileUrl} alt="originalFile" class="w-2/3 justify-center items-center rounded" />
+        <div class="image-viewer">
+            <img src={originalFileUrl} alt="originalFile" class="image" />
         </div>
     {/if}
 </div>
 
 
+
+
 <style>
-    /* These styles mirror the Vue scoped styles */
-    .logo {
-        height: 6em;
-        padding: 1.5em;
-        will-change: filter;
-        transition: filter 300ms;
+    /* Container (equivalent to Tailwind's p-6) */
+    .container {
+        padding: 1.5rem;
     }
-    .logo:hover {
-        filter: drop-shadow(0 0 2em #646cffaa);
+
+    /* Header styling: text-2xl, font-bold, text-gray-700, mb-6, text-center */
+    .header {
+        font-size: 1.5rem;       /* text-2xl */
+        font-weight: bold;       /* font-bold */
+        color: #374151;          /* text-gray-700 */
+        margin-bottom: 1.5rem;   /* mb-6 */
+        text-align: center;      /* text-center */
     }
-    .logo.vue:hover {
-        filter: drop-shadow(0 0 2em #42b883aa);
+
+    /* Grid container: grid, grid-cols-1, gap-6, mt-6, justify-items-center */
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr); /* grid-cols-1 */
+        gap: 1.5rem;                           /* gap-6 */
+        margin-top: 1.5rem;                    /* mt-6 */
+        justify-items: center;                 /* justify-items-center */
     }
+
+    /* Responsive adjustments */
+    /* On small screens: 2 columns */
+    @media (min-width: 640px) {
+        .grid-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* On large screens: 4 columns */
+    @media (min-width: 1024px) {
+        .grid-container {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    /* Item container: w-full and flex-grow */
+    .item-container {
+        width: 100%;   /* w-full */
+        flex-grow: 1;  /* flex-grow */
+    }
+
+    /* DokaObject component styling (if needed) */
+    .object {
+        width: 100%;   /* w-full */
+        flex-grow: 1;  /* flex-grow */
+    }
+
+    /* Image viewer container: fixed, inset-0, flex, w-2/3, justify-center, items-center */
+    .image-viewer {
+        position: fixed; /* fixed */
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;         /* inset-0 */
+        display: flex;   /* flex */
+        width: 66.666667%; /* w-2/3 */
+        justify-content: center; /* justify-center */
+        align-items: center;     /* items-center */
+    }
+
+    /* Image styling: w-2/3, rounded */
+    .image {
+        width: 66.666667%;      /* w-2/3 */
+        border-radius: 0.25rem; /* rounded */
+    }
+
+
 </style>
